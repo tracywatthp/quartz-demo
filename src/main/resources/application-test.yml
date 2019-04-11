@@ -1,0 +1,71 @@
+#数据库配置(单数据源配置)
+#spring:
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://127.0.0.1:3306/distribute_client?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+#    username: root
+#    password: 123456
+#    initialSize: 0
+#    maxActive: 20
+#    minIdle: 0
+#    maxWait: 60000
+#    validation-query: select 1 from dual
+
+#数据库配置(多数据源配置)
+spring:
+  datasource:
+    # 配置druid数据源监控
+    druid:
+      stat-view-servlet:
+        loginUsername: admin
+        loginPassword: 123456
+        resetEnable: true
+      aop-patterns: com.*.service.*
+      web-stat-filter:
+        url-pattern: /*
+        exclusions: /druid/*,*.js,*.gif,*.jpg,*.png,*.css,*.ico
+    dynamic:
+      # druid连接池基本配置
+      druid:
+        type: com.alibaba.druid.pool.DruidDataSource
+        initialSize: 1
+        minIdle: 3
+        maxActive: 30
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 30000
+        validationQuery: SELECT 1 FROM DUAL
+        testWhileIdle: true
+        exceptionSorter: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat,wall,slf4j,config
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=3000
+        useGlobalDataSourceStat: false
+        proxyFilters: logFilter,statFilter
+      primary: dev     #默认数据源
+      datasource:
+        dev:
+          username: root
+          password: 123456
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:3306/distribute_client?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+          druid: # 以下参数针对每个库可以重新设置druid参数
+            initial-size: 3
+            validation-query: select 1 FROM DUAL
+            #（非全局参数）设置即表示启用加密,底层会自动帮你配置相关的连接参数和filter。
+#            public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKJ8TzXYe8QMgn+68os7xFOoYtKCMKEAa+vxG644XKYQHg7IUgQPdBAhWQB/DkuiodrbNbv4VQMx/kLmJL3uWScCAwEAAQ==
+#        sit:
+#          username: sit
+#          password: QcqbqfQy4SMGw8izZjPWCmph2Oh0xB1QD5Ec2If9wllhECzHTdGRCda02otpduRmdQ3XOSHCJWKSXmlvzZgQqw==
+#          driver-class-name: com.mysql.jdbc.Driver
+#          url: jdbc:mysql://10.7.2.8:3306/sit3.0
+#          druid: # 以下参数针对每个库可以重新设置druid参数
+#            #（非全局参数）设置即表示启用加密,底层会自动帮你配置相关的连接参数和filter。
+#            public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHGwq7q2RmwuRgKxBypQHw0mYu4BQZ3eMsTrdK8E6igRcxsobUC7uT0SoxIjl1WveWniCASejoQtn/BY6hVKWsCAwEAAQ==
+      devtools:
+        restart:
+          enabled: true
