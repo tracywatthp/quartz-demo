@@ -79,7 +79,7 @@ public class TableGenerator {
                 // 全局配置
                 new GlobalConfig()
                         .setOutputDir(prop.getProperty("javaFileOutDir"))//输出目录
-                        .setFileOverride(false)			//是否覆盖文件
+                        .setFileOverride(true)			//是否覆盖文件
                         .setActiveRecord(false)			//开启activeRecord 模式
                         .setEnableCache(false)			//XML二级缓存
                         .setBaseResultMap(true)			//XMLResultMap
